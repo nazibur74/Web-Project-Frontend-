@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Employees - Zstore</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    body.dashboard {
+      padding-top: 80px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #083a38;
+    }
+
+    /* Add Employee Form */
+    .employee-form {
+      width: 80%;
+      max-width: 1400px;
+      margin: 0 auto 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s ease;
+    }
+
+    .employee-form.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .employee-form label {
+      font-weight: bold;
+      color: #083a38;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .employee-form input,
+    .employee-form select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .employee-form button {
+      background: #083a38;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .employee-form button:hover {
+      background: #0a4f4c;
+    }
+
+    .image-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      object-fit: cover;
+      margin: 0 auto 15px;
+      display: block;
+    }
+
+    /* Employee Table */
+    .employee-table-container {
+      width: 80%;
+      max-width: 1400px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s ease;
+    }
+
+    .employee-table-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #083a38;
+    }
+
+    table th,
+    table td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    table th {
+      font-size: 16px;
+    }
+
+    table img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* Pagination */
+    .pagination {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .pagination button {
+      padding: 7px 14px;
+      margin: 0 5px;
+      border: none;
+      background: #083a38;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-number {
+      padding: 7px 12px;
+      margin: 0 3px;
+      border-radius: 4px;
+      border: 1px solid #083a38;
+      cursor: pointer;
+    }
+
+    .page-number.active {
+      background: #083a38;
+      color: white;
+    }
+
+    /* Zebra stripe table rows */
+    #employeeTable tbody tr:nth-child(odd) {
+      background-color: #fff;
+    }
+
+    #employeeTable tbody tr:nth-child(even) {
+      background-color: #c6f1f4;
+    }
+
+    @media (max-width: 768px) {
+
+      .employee-form,
+      .employee-table-container {
+        width: 95%;
+        margin: 20px auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="dashboard">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="left-section">
+      <button id="sidebar-toggle">☰</button>
+      <h2 class="dashboard-logo">Zstore</h2>
+    </div>
+    <div class="right-section">
+      <div class="profile-info">
+        <span>Nazibur Rahman</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar hidden" id="sidebar">
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="employees.html" class="active">Employees</a></li>
+      <li><a href="suppliers.html">Suppliers</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="saless.html">Sales</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- SECTION TITLE -->
+  <h2 class="section-title fade-up" style="margin-top: 40px;">Employee Management</h2>
+
+  <!-- ADD EMPLOYEE FORM -->
+  <div class="employee-form fade-up">
+    <img src="pictures/default-profile.png" class="image-preview" alt="Employee Photo">
+
+    <label>Employee Name</label>
+    <input type="text" placeholder="Enter full name">
+
+    <label>Email</label>
+    <input type="email" placeholder="Enter email">
+
+    <label>Mobile Number</label>
+    <input type="text" placeholder="Enter mobile number">
+
+    <label>Date of Birth</label>
+    <input type="date">
+
+    <label>NID Number</label>
+    <input type="text" placeholder="Enter NID number">
+
+    <label>Role</label>
+    <select>
+      <option>Manager</option>
+      <option>Cashier</option>
+      <option>Sales Assistant</option>
+      <option>Inventory Staff</option>
+    </select>
+
+    <label>Address</label>
+    <input type="text" placeholder="Enter full address">
+
+    <button>Add Employee</button>
+  </div>
+
+  <!-- EMPLOYEE TABLE -->
+  <div class="employee-table-container fade-up">
+    <table id="employeeTable">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Employee ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="pagination">
+      <button id="prevBtn">Previous</button>
+      <span id="pageNumbers"></span>
+      <button id="nextBtn">Next</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="pictures/footer.png" class="footer-logo">
+      <p>&copy; 2025 <b>Zstore Team</b> All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* Sidebar toggle */
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    const sidebar = document.getElementById("sidebar");
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('visible');
+    });
+
+    /* Employee data */
+    const employees = [
+      { id: "EMP-001", name: "Nazibur Rahman", email: "nazibur@gmail.com", mobile: "017100000", role: "Manager", photo: "pictures/Shafi.jpg" },
+      { id: "EMP-002", name: "Shah Alam", email: "alam@gmail.com", mobile: "018200000", role: "Cashier", photo: "pictures/Alam.jpg" },
+      { id: "EMP-003", name: "Likhon", email: "likhon@gmail.com", mobile: "019300000", role: "Sales Assistant", photo: "pictures/Likhon.jpg" },
+      { id: "EMP-004", name: "Shela", email: "shela@gmail.com", mobile: "017400000", role: "UI/UX", photo: "pictures/Shela.png" },
+      { id: "EMP-005", name: "Partha", email: "partha@gmail.com", mobile: "016500000", role: "System Analyst", photo: "pictures/Partha.png" },
+      { id: "EMP-006", name: "Ratul", email: "ratul@gmail.com", mobile: "017600000", role: "Inventory Staff", photo: "pictures/arafat.jpg" },
+      { id: "EMP-007", name: "Hasan", email: "hasan@gmail.com", mobile: "017700000", role: "Sales", photo: "pictures/turjo.jpg" },
+      { id: "EMP-008", name: "Kamal", email: "kamal@gmail.com", mobile: "017800000", role: "Cashier", photo: "pictures/jony.jpg" },
+      { id: "EMP-009", name: "Jamal", email: "jamal@gmail.com", mobile: "017900000", role: "Manager", photo: "pictures/intan.jpg" },
+      { id: "EMP-010", name: "Salam", email: "salam@gmail.com", mobile: "018000000", role: "Sales Assistant", photo: "pictures/shamsul.jpg" },
+      { id: "EMP-011", name: "Tuhin", email: "tuntun@gmail.com", mobile: "018100000", role: "Inventory Staff", photo: "pictures/raihan.jpg" }
+    ];
+
+    let currentPage = 1;
+    const rowsPerPage = 5;
+
+    function displayTable() {
+      const tableBody = document.querySelector("#employeeTable tbody");
+      tableBody.innerHTML = "";
+
+      let start = (currentPage - 1) * rowsPerPage;
+      let end = start + rowsPerPage;
+      let paginatedItems = employees.slice(start, end);
+
+      paginatedItems.forEach(emp => {
+        tableBody.innerHTML += `<tr>
+                    <td><img src="${emp.photo}" alt="${emp.name}"></td>
+                    <td>${emp.id}</td>
+                    <td>${emp.name}</td>
+                    <td>${emp.email}</td>
+                    <td>${emp.mobile}</td>
+                    <td>${emp.role}</td>
+                </tr>`;
+      });
+
+      updatePagination();
+    }
+
+    function updatePagination() {
+      const pageNumbers = document.getElementById("pageNumbers");
+      const totalPages = Math.ceil(employees.length / rowsPerPage);
+
+      pageNumbers.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.innerHTML += `<span class="page-number ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</span>`;
+      }
+
+      document.getElementById("prevBtn").disabled = currentPage === 1;
+      document.getElementById("nextBtn").disabled = currentPage === totalPages;
+    }
+
+    function goToPage(n) {
+      currentPage = n;
+      displayTable();
+    }
+
+    document.getElementById("prevBtn").onclick = () => {
+      if (currentPage > 1) currentPage--;
+      displayTable();
+    };
+    document.getElementById("nextBtn").onclick = () => {
+      const totalPages = Math.ceil(employees.length / rowsPerPage);
+      if (currentPage < totalPages) currentPage++;
+      displayTable();
+    };
+
+    displayTable();
+
+    /* Scroll animation */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    });
+    document.querySelectorAll('.fade-up').forEach(elem => observer.observe(elem));
+  </script>
+
+</body>
+
+</html>

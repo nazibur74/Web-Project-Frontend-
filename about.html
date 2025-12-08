@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>About - Zstore</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* About Page Updated Styles */
+        .section-title {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-size: 30px;
+            color: #083a38;
+        }
+
+        .about-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px 40px;
+            flex-wrap: wrap;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .about-section img {
+            width: 520px;
+            max-width: 100%;
+            border-radius: 0;
+        }
+
+        .about-text {
+            max-width: 650px;
+            color: #083a38;
+            line-height: 1.9;
+            font-size: 18px;
+            text-align: justify;
+        }
+
+        /* Smooth fade + slide animations */
+        .fade-up,
+        .fade-left,
+        .fade-right {
+            opacity: 0;
+            transition: all 0.9s ease;
+        }
+
+        .fade-up {
+            transform: translateY(40px);
+        }
+
+        .fade-left {
+            transform: translateX(-40px);
+        }
+
+        .fade-right {
+            transform: translateX(40px);
+        }
+
+        /* When visible */
+        .show {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
+        /* Team Section */
+        .team-section {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 30px 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            text-align: center;
+            width: 230px;
+        }
+
+        .team-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .about-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="dashboard">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="left-section">
+            <button id="sidebar-toggle">☰</button>
+            <h2 class="dashboard-logo">Zstore</h2>
+        </div>
+        <div class="right-section">
+            <div class="profile-info">
+                <span>Nazibur Rahman</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar hidden" id="sidebar">
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="employees.html">Employees</a></li>
+            <li><a href="suppliers.html">Suppliers</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="sales.html">Sells</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="login.html">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- SECTION 1 — ABOUT Zstore -->
+    <h2 class="section-title" style="margin-top: 70px;">About Zstore</h2>
+    <div class="about-section fade-up">
+        <img src="pictures/about1.jpg" alt="Zstore">
+        <div class="about-text">
+            <p>
+                Zstore is a next-generation inventory and sales management platform designed for small and
+                medium-sized businesses. Our mission is to simplify store operations by providing clean workflows,
+                automated inventory tracking, and smart sales insights — all in one unified dashboard.
+            </p>
+            <p>
+                Whether it's tracking product movement, managing employees, or analyzing profits, Zstore ensures
+                smooth operations with maximum accuracy and minimal manual work.
+            </p>
+        </div>
+    </div>
+
+    <!-- SECTION 2 — WHAT WE DO -->
+    <h2 class="section-title">What We Do</h2>
+    <div class="about-section fade-left">
+        <img src="pictures/about2.jpg" alt="What We Do">
+        <div class="about-text">
+            <p>
+                We develop modern software tools to help business owners manage inventory, employees, suppliers,
+                and sales seamlessly. Zstore provides real-time analytics, automated record-keeping, and detailed
+                business insights to support smart decision-making.
+            </p>
+            <ul style="line-height:1.8; margin-top:10px;">
+                <li>Inventory & stock management</li>
+                <li>Sales tracking & reporting</li>
+                <li>Employee & supplier management</li>
+                <li>Automated calculations & dashboards</li>
+                <li>Business performance monitoring</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SECTION 3 — WHO WE ARE -->
+    <h2 class="section-title">Who We Are</h2>
+    <div class="about-section fade-right">
+        <img src="pictures/about3.jpg" alt="Who We Are">
+        <div class="about-text">
+            <p>
+                We are a passionate group of developers and designers dedicated to building reliable and user-friendly
+                business software solutions. Our focus is on delivering clean UI, smooth UX, and automated tools that
+                reduce complexity and improve daily operations.
+            </p>
+            <p>
+                At Zstore, we believe every business — small or big — deserves access to tools that help them grow.
+            </p>
+        </div>
+    </div>
+
+    <!-- SECTION 4 — OUR TEAM -->
+    <h2 class="section-title">Our Team</h2>
+    <div class="team-section fade-up">
+        <div class="team-card">
+            <img src="pictures/Shafi.jpg" alt="Team Member">
+            <h3>Nazibur Rahman</h3>
+            <p>Lead Developer</p>
+        </div>
+
+        <div class="team-card">
+            <img src="pictures/Alam.jpg" alt="Team Member">
+            <h3>Shah Alam</h3>
+            <p>Frontend Developer</p>
+        </div>
+
+        <div class="team-card">
+            <img src="pictures/Likhon.jpg" alt="Team Member">
+            <h3>Abid Hasan Likhon</h3>
+            <p>Backend Engineer</p>
+        </div>
+
+        <div class="team-card">
+            <img src="pictures/Shela.png" alt="Team Member">
+            <h3>Shaidun Nahar Shela</h3>
+            <p>UI/UX Designer</p>
+        </div>
+
+        <div class="team-card">
+            <img src="pictures/Partha.png" alt="Team Member">
+            <h3>Partha Podder</h3>
+            <p>System Analyst</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="pictures/footer.png" alt="Zstore Logo" class="footer-logo">
+            <p>&copy; 2025 <b>Zstore Team</b> All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+            });
+        });
+
+        document.querySelectorAll('.fade-up, .fade-left, .fade-right')
+            .forEach(elem => observer.observe(elem));
+    </script>
+
+    <script>
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('visible');
+        });
+    </script>
+
+</body>
+
+</html>

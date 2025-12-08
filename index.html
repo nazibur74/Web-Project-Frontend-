@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Zstore Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="dashboard">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="left-section">
+      <button id="sidebar-toggle">☰</button>
+      <h2 class="dashboard-logo">Zstore</h2>
+    </div>
+    <div class="right-section">
+      <div class="profile-info">
+        <span>Nazibur Rahman</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar hidden" id="sidebar">
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="employees.html">Employees</a></li>
+      <li><a href="suppliers.html">Suppliers</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="sales.html">Sales</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <h2>Overview</h2>
+
+    <!-- Dashboard Cards -->
+    <div class="cards">
+      <div class="card">
+        <img src="pictures/expenses.png" class="card-icon" alt="Expense">
+        <h3>Total Expense</h3>
+        <p class="count" data-target="12500">0</p>
+      </div>
+      <div class="card">
+        <img src="pictures/gross-profit.png" class="card-icon" alt="Profit">
+        <h3>Gross Profit</h3>
+        <p class="count" data-target="18750">0</p>
+      </div>
+      <div class="card">
+        <img src="pictures/failure.png" class="card-icon" alt="Stock">
+        <h3>Closing Stock</h3>
+        <p class="count" data-target="1320">0</p>
+      </div>
+      <div class="card">
+        <img src="pictures/return.png" class="card-icon" alt="Returns">
+        <h3>Product Returns</h3>
+        <p class="count" data-target="832">0</p>
+      </div>
+      <div class="card">
+        <img src="pictures/rate-of-return.png" class="card-icon" alt="Sell Returns">
+        <h3>Sales Returns</h3>
+        <p class="count" data-target="575">0</p>
+      </div>
+      <div class="card">
+        <img src="pictures/employee.png" class="card-icon" alt="Employees">
+        <h3>Total Employees</h3>
+        <p class="count" data-target="1225">0</p>
+      </div>
+      <div class="card">
+        <img src="pictures/delivery-courier.png" class="card-icon" alt="Suppliers">
+        <h3>Total Suppliers</h3>
+        <p class="count" data-target="278">0</p>
+      </div>
+      <div class="card">
+        <img src="pictures/box.png" class="card-icon" alt="Products">
+        <h3>Total Products</h3>
+        <p class="count" data-target="960">0</p>
+      </div>
+    </div>
+
+    <!-- Monthly Sales Chart -->
+    <h2>Monthly Sales</h2>
+    <div class="charts">
+      <canvas id="monthlyChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="pictures/footer.png" alt="Zstore Logo" class="footer-logo">
+      <p>&copy; 2025 <b>Zstore Team</b> All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Sidebar Toggle
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('visible');
+    });
+
+    // Animate numbers
+    const counters = document.querySelectorAll('.count');
+    counters.forEach(counter => {
+      const updateCount = () => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const increment = target / 200;
+
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          requestAnimationFrame(updateCount);
+        } else {
+          counter.innerText = target;
+        }
+      };
+      updateCount();
+    });
+
+    // Chart.js Gradient Bar
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0.4, 'lightgreen');
+    gradient.addColorStop(0.7, 'yellow');
+    gradient.addColorStop(1, 'coral');
+
+    const monthlyChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Sales',
+          data: [45200, 14900, 33000, 24500, 26200, 42800, 73200, 64000, 34500, 83700, 33900, 70000],
+          backgroundColor: gradient,
+          borderRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        animation: {
+          duration: 1500,
+          easing: 'easeOutBounce'
+        },
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Products - Zstore</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body.dashboard {
+      padding-top: 80px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #083a38;
+    }
+
+    /* Product Container */
+    .product-container {
+      width: 80%;
+      max-width: 1400px;
+      margin: 20px auto;
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s ease;
+    }
+
+    .product-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Product Card */
+    .product-card {
+      display: flex;
+      width: 100%;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Product Images */
+    .product-images {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 300px;
+      position: relative;
+    }
+
+    .main-image {
+      width: 280px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .image-nav {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .image-nav button {
+      padding: 5px 10px;
+      border: none;
+      background: #083a38;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Product Info */
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+      color: #083a38;
+    }
+
+    .product-info h3 {
+      margin: 0 0 10px;
+    }
+
+    .product-info p {
+      margin: 5px 0;
+    }
+
+    .product-info span {
+      font-weight: bold;
+    }
+
+    /* Add Product Button */
+    .add-product-btn {
+      display: block;
+      margin: 20px auto 40px auto;
+      background: #083a38;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .add-product-btn:hover {
+      background: #0a4f4c;
+    }
+
+    /* Modal Form */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      max-width: 90%;
+      position: relative;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      color: #083a38;
+    }
+
+    .modal-content label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      padding: 10px 16px;
+      background: #083a38;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: red;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .product-card {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .product-images {
+        width: 100%;
+      }
+
+      .product-info {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="dashboard">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="left-section">
+      <button id="sidebar-toggle">☰</button>
+      <h2 class="dashboard-logo">Zstore</h2>
+    </div>
+    <div class="right-section">
+      <div class="profile-info">
+        <span>Nazibur Rahman</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar hidden" id="sidebar">
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="employees.html">Employees</a></li>
+      <li><a href="suppliers.html">Suppliers</a></li>
+      <li><a href="products.html" class="active">Products</a></li>
+      <li><a href="sales.html">Sales</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- SECTION TITLE -->
+  <h2 class="section-title fade-up" style="margin-top: 40px;">Product Management</h2>
+
+  <!-- Product List Container -->
+  <div class="product-container fade-up" id="productContainer"></div>
+
+  <!-- Add Product Button -->
+  <button class="add-product-btn" id="addProductBtn">Add Product</button>
+
+  <!-- Modal Form -->
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <button class="close-btn" id="closeModal">&times;</button>
+      <h3>Add Product</h3>
+      <label>Product Name</label>
+      <input type="text" id="prodName" placeholder="Enter product name">
+      <label>Product ID</label>
+      <input type="text" id="prodId" placeholder="Enter product ID">
+      <label>Description</label>
+      <textarea id="prodDesc" placeholder="Enter product description"></textarea>
+      <label>Quantity Available</label>
+      <input type="number" id="prodQty" placeholder="Enter quantity">
+      <label>Product Images (comma separated URLs)</label>
+      <input type="text" id="prodImages" placeholder="Image1.jpg, Image2.jpg, Image3.jpg">
+      <button id="saveProduct">Save Product</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="pictures/footer.png" class="footer-logo">
+      <p>&copy; 2025 <b>Zstore Team</b> All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Sidebar toggle
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    const sidebar = document.getElementById("sidebar");
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('visible');
+    });
+
+    // Sample products
+    let products = [
+      {
+        id: "PROD-001",
+        name: "Mojo 250ml",
+        description: "Mojo is the local cola brand in Bangladesh.The name “MOJO” is derived from the word “Moja” which means fun.Has a taste that refreshes, for a rewardingly uplifting experience.",
+        quantity: 1100,
+        images: ["pictures/m1.jpg", "pictures/m2.jpg"],
+        currentImage: 0
+      },
+      {
+        id: "PROD-002",
+        name: "Nestle Nescafe Classic Instant Coffee Jar 45gm",
+        description: "This product is manufactured/packaged in India and its raw materials are collected from Switzerland. Start your day right with the first sip of NESCAFÉ Classic NESCAFÉ Classic soluble coffee is perfect for any time of the day Add a teaspoon (1.5g) of NESCAFÉ Classic and 5g Nestlé Coffeemate into 120ml hot (80°C) water. Add sugar as per your taste and stir up well to get a perfect cup of NESCAFÉ Storage Instruction: Close the lid tightly after use, always use a dry spoon, and store it in a cool, dry, and hygienic place. Variant: NESCAFÉ CLASSIC Net Weight: 45 gm Marketed by Nestle Bangladesh Limited.",
+        quantity: 435,
+        images: ["pictures/n1.jpg", "pictures/n2.jpg"],
+        currentImage: 0
+      }
+    ];
+
+    const productContainer = document.getElementById("productContainer");
+
+    function displayProducts() {
+      productContainer.innerHTML = "";
+      products.forEach((prod, index) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+
+        card.innerHTML = `
+          <div class="product-images">
+            <img src="${prod.images[prod.currentImage]}" class="main-image">
+            <div class="image-nav">
+              <button onclick="prevImage(${index})">&#8592;</button>
+              <button onclick="nextImage(${index})">&#8594;</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <h3>${prod.name}</h3>
+            <p><span>ID:</span> ${prod.id}</p>
+            <p><span>Description:</span> ${prod.description}</p>
+            <p><span>Quantity Available:</span> ${prod.quantity}</p>
+          </div>
+        `;
+        productContainer.appendChild(card);
+      });
+    }
+
+    function prevImage(index) {
+      products[index].currentImage =
+        (products[index].currentImage - 1 + products[index].images.length) % products[index].images.length;
+      displayProducts();
+    }
+
+    function nextImage(index) {
+      products[index].currentImage =
+        (products[index].currentImage + 1) % products[index].images.length;
+      displayProducts();
+    }
+
+    displayProducts();
+
+    // Add Product Modal
+    const addProductBtn = document.getElementById("addProductBtn");
+    const productModal = document.getElementById("productModal");
+    const closeModal = document.getElementById("closeModal");
+    const saveProduct = document.getElementById("saveProduct");
+
+    addProductBtn.addEventListener("click", () => {
+      productModal.style.display = "flex";
+    });
+
+    closeModal.addEventListener("click", () => {
+      productModal.style.display = "none";
+    });
+
+    saveProduct.addEventListener("click", () => {
+      const name = document.getElementById("prodName").value;
+      const id = document.getElementById("prodId").value;
+      const desc = document.getElementById("prodDesc").value;
+      const qty = document.getElementById("prodQty").value;
+      const imgs = document.getElementById("prodImages").value.split(",").map(img => img.trim());
+
+      products.push({ id, name, description: desc, quantity: qty, images: imgs, currentImage: 0 });
+      displayProducts();
+      productModal.style.display = "none";
+    });
+
+    // Scroll animation
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    });
+    document.querySelectorAll('.fade-up').forEach(elem => observer.observe(elem));
+  </script>
+
+</body>
+
+</html>

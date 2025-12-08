@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Suppliers - Zstore</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    body.dashboard {
+      padding-top: 80px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #083a38;
+    }
+
+    /* Add Supplier Form */
+    .supplier-form {
+      width: 80%;
+      max-width: 1400px;
+      margin: 0 auto 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s ease;
+    }
+
+    .supplier-form.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .supplier-form label {
+      font-weight: bold;
+      color: #083a38;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .supplier-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .supplier-form button {
+      background: #083a38;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .supplier-form button:hover {
+      background: #0a4f4c;
+    }
+
+    /* Supplier Table */
+    .supplier-table-container {
+      width: 80%;
+      max-width: 1400px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s ease;
+    }
+
+    .supplier-table-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #083a38;
+    }
+
+    table th,
+    table td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    table th {
+      font-size: 16px;
+    }
+
+    /* Zebra stripe table rows */
+    #supplierTable tbody tr:nth-child(odd) {
+      background-color: #fff;
+    }
+
+    #supplierTable tbody tr:nth-child(even) {
+      background-color: #c6f1f4;
+    }
+
+    /* Pagination */
+    .pagination {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .pagination button {
+      padding: 7px 14px;
+      margin: 0 5px;
+      border: none;
+      background: #083a38;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-number {
+      padding: 7px 12px;
+      margin: 0 3px;
+      border-radius: 4px;
+      border: 1px solid #083a38;
+      cursor: pointer;
+    }
+
+    .page-number.active {
+      background: #083a38;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .supplier-form,
+      .supplier-table-container {
+        width: 95%;
+        margin: 20px auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="dashboard">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="left-section">
+      <button id="sidebar-toggle">☰</button>
+      <h2 class="dashboard-logo">Zstore</h2>
+    </div>
+    <div class="right-section">
+      <div class="profile-info">
+        <span>Nazibur Rahman</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar hidden" id="sidebar">
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="employees.html">Employees</a></li>
+      <li><a href="suppliers.html" class="active">Suppliers</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="sales.html">Sales</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- SECTION TITLE -->
+  <h2 class="section-title fade-up" style="margin-top: 40px;">Supplier Management</h2>
+
+  <!-- ADD SUPPLIER FORM -->
+  <div class="supplier-form fade-up">
+    <label>Supplier Name</label>
+    <input type="text" placeholder="Enter full name">
+
+    <label>Email</label>
+    <input type="email" placeholder="Enter email">
+
+    <label>Mobile Number</label>
+    <input type="text" placeholder="Enter mobile number">
+
+    <label>Address</label>
+    <input type="text" placeholder="Enter full address">
+
+    <button>Add Supplier</button>
+  </div>
+
+  <!-- SUPPLIER TABLE -->
+  <div class="supplier-table-container fade-up">
+    <table id="supplierTable">
+      <thead>
+        <tr>
+          <th>Supplier ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="pagination">
+      <button id="prevBtn">Previous</button>
+      <span id="pageNumbers"></span>
+      <button id="nextBtn">Next</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="pictures/footer.png" class="footer-logo">
+      <p>&copy; 2025 <b>Zstore Team</b> All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* Sidebar toggle */
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    const sidebar = document.getElementById("sidebar");
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('visible');
+    });
+
+    /* Supplier data */
+    const suppliers = [
+      { id: "SUP-001", name: "ABC Traders", email: "abc@gmail.com", mobile: "017100000", address: "Dhaka" },
+      { id: "SUP-002", name: "XYZ Suppliers", email: "xyz@gmail.com", mobile: "018200000", address: "Chittagong" },
+      { id: "SUP-003", name: "Best Goods", email: "best@gmail.com", mobile: "019300000", address: "Khulna" },
+      { id: "SUP-004", name: "Quick Supply", email: "quick@gmail.com", mobile: "017400000", address: "Rajshahi" },
+      { id: "SUP-005", name: "Pro Supply", email: "pro@gmail.com", mobile: "016500000", address: "Sylhet" },
+      { id: "SUP-006", name: "Mega Traders", email: "mega@gmail.com", mobile: "017600000", address: "Barishal" }
+    ];
+
+    let currentPage = 1;
+    const rowsPerPage = 5;
+
+    function displayTable() {
+      const tableBody = document.querySelector("#supplierTable tbody");
+      tableBody.innerHTML = "";
+
+      let start = (currentPage - 1) * rowsPerPage;
+      let end = start + rowsPerPage;
+      let paginatedItems = suppliers.slice(start, end);
+
+      paginatedItems.forEach(sup => {
+        tableBody.innerHTML += `<tr>
+                    <td>${sup.id}</td>
+                    <td>${sup.name}</td>
+                    <td>${sup.email}</td>
+                    <td>${sup.mobile}</td>
+                    <td>${sup.address}</td>
+                </tr>`;
+      });
+
+      updatePagination();
+    }
+
+    function updatePagination() {
+      const pageNumbers = document.getElementById("pageNumbers");
+      const totalPages = Math.ceil(suppliers.length / rowsPerPage);
+
+      pageNumbers.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.innerHTML += `<span class="page-number ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</span>`;
+      }
+
+      document.getElementById("prevBtn").disabled = currentPage === 1;
+      document.getElementById("nextBtn").disabled = currentPage === totalPages;
+    }
+
+    function goToPage(n) {
+      currentPage = n;
+      displayTable();
+    }
+
+    document.getElementById("prevBtn").onclick = () => {
+      if (currentPage > 1) currentPage--;
+      displayTable();
+    };
+    document.getElementById("nextBtn").onclick = () => {
+      const totalPages = Math.ceil(suppliers.length / rowsPerPage);
+      if (currentPage < totalPages) currentPage++;
+      displayTable();
+    };
+
+    displayTable();
+
+    /* Scroll animation */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    });
+    document.querySelectorAll('.fade-up').forEach(elem => observer.observe(elem));
+  </script>
+
+</body>
+
+</html>

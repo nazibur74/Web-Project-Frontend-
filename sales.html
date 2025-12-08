@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sales - Zstore</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body.dashboard {
+      padding-top: 80px;
+      font-family: Arial, sans-serif;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #083a38;
+    }
+
+    /* Sales Page Container */
+    .sales-container {
+      width: 90%;
+      max-width: 1400px;
+      margin: 20px auto;
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s ease;
+    }
+
+    .sales-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Sales Table */
+    .sales-table-container {
+      flex: 2;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      min-width: 350px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #083a38;
+    }
+
+    table th,
+    table td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    table th {
+      font-size: 16px;
+    }
+
+    #salesTable tbody tr:nth-child(odd) {
+      background-color: #fff;
+    }
+
+    #salesTable tbody tr:nth-child(even) {
+      background-color: #c6f1f4;
+    }
+
+    .sale-form {
+      flex: 1;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      min-width: 300px;
+      height: fit-content;
+    }
+
+    .sale-form label {
+      font-weight: bold;
+      color: #083a38;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .sale-form input,
+    .sale-form select {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .sale-form button {
+      background: #083a38;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .sale-form button:hover {
+      background: #0a4f4c;
+    }
+
+    /* Print button style */
+    .printBtn {
+      background: #ccc;
+      color: #000;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .printBtn:hover {
+      background: rgb(2, 76, 2);
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .sales-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body class="dashboard">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="left-section">
+      <button id="sidebar-toggle">☰</button>
+      <h2 class="dashboard-logo">Zstore</h2>
+    </div>
+    <div class="right-section">
+      <div class="profile-info">
+        <span>Nazibur Rahman</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar hidden" id="sidebar">
+    <ul>
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="employees.html">Employees</a></li>
+      <li><a href="suppliers.html">Suppliers</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="sales.html" class="active">Sales</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- SECTION TITLE -->
+  <h2 class="section-title fade-up" style="margin-top: 40px;">Sales Management</h2>
+
+  <div class="sales-container fade-up">
+
+    <!-- Sales Table -->
+    <div class="sales-table-container">
+      <table id="salesTable">
+        <thead>
+          <tr>
+            <th>Sale ID</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Receipt</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Add Sale Form -->
+    <div class="sale-form">
+      <h3>Add Sale</h3>
+      <label>Product</label>
+      <select id="saleProduct"></select>
+
+      <label>Quantity</label>
+      <input type="number" id="saleQty" placeholder="Enter quantity">
+
+      <label>Customer Name</label>
+      <input type="text" id="saleCustomer" placeholder="Enter customer name">
+
+      <label>Date</label>
+      <input type="date" id="saleDate">
+
+      <label>Total Price</label>
+      <input type="text" id="saleTotal" placeholder="Total price" readonly>
+
+      <button id="addSaleBtn">Add Sale</button>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="pictures/footer.png" class="footer-logo">
+      <p>&copy; 2025 <b>Zstore Team</b> All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Sidebar toggle
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    const sidebar = document.getElementById("sidebar");
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('visible');
+    });
+
+    // Sample Products
+    const products = [
+      { id: "PROD-001", name: "Mojo 250ml", price: 60 },
+      { id: "PROD-002", name: "Nestle Nescafe Classic Instant Coffee Jar 45gm", price: 250 },
+    ];
+
+    const saleProductSelect = document.getElementById("saleProduct");
+    products.forEach(prod => {
+      const option = document.createElement("option");
+      option.value = prod.id;
+      option.textContent = `${prod.name} - Taka ${prod.price}`;
+      saleProductSelect.appendChild(option);
+    });
+
+    // Sample demo sales
+    let sales = [
+      { id: "SALE-001", product: "Mojo 250ml", quantity: 2, total: 120, date: "2025-12-01", customer: "Shaban Khandakar" },
+      { id: "SALE-002", product: "Nestle Nescafe Classic Instant Coffee Jar 45gm", quantity: 1, total: 250, date: "2025-12-02", customer: "Ali Abbas" },
+      { id: "SALE-003", product: "Nestle Nescafe Classic Instant Coffee Jar 45gm", quantity: 3, total: 750, date: "2025-12-03", customer: "Mukul Manager" },
+      { id: "SALE-004", product: "Mojo 250ml", quantity: 1, total: 60, date: "2025-12-04", customer: "Araddha Podder" },
+      { id: "SALE-005", product: "Mojo 250ml", quantity: 4, total: 240, date: "2025-12-05", customer: "Shaidul Uncle" },
+      { id: "SALE-006", product: "Nestle Nescafe Classic Instant Coffee Jar 45gm", quantity: 2, total: 500, date: "2025-12-06", customer: "Nurse Khalato Bon" }
+    ];
+
+    const saleQty = document.getElementById("saleQty");
+    const saleTotal = document.getElementById("saleTotal");
+
+    saleQty.addEventListener("input", updateTotal);
+    saleProductSelect.addEventListener("change", updateTotal);
+
+    function updateTotal() {
+      const selectedProduct = products.find(p => p.id === saleProductSelect.value);
+      saleTotal.value = selectedProduct.price * (saleQty.value || 0);
+    }
+
+    function displaySales() {
+      const tbody = document.querySelector("#salesTable tbody");
+      tbody.innerHTML = "";
+      sales.forEach(sale => {
+        tbody.innerHTML += `<tr>
+          <td>${sale.id}</td>
+          <td>${sale.product}</td>
+          <td>${sale.quantity}</td>
+          <td>Taka${sale.total}</td>
+          <td>${sale.date}</td>
+          <td>${sale.customer}</td>
+          <td><button class="printBtn" data-id="${sale.id}">Print</button></td>
+        </tr>`;
+      });
+    }
+
+    document.getElementById("addSaleBtn").addEventListener("click", () => {
+      const productId = saleProductSelect.value;
+      const prodName = products.find(p => p.id === productId).name;
+      const quantity = parseInt(saleQty.value);
+      const customer = document.getElementById("saleCustomer").value;
+      const date = document.getElementById("saleDate").value;
+      const total = parseInt(saleTotal.value);
+
+      if (!quantity || !customer || !date) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      const saleId = "SALE-" + String(sales.length + 1).padStart(3, "0");
+      sales.push({ id: saleId, product: prodName, quantity, total, date, customer });
+
+      displaySales();
+
+      // Reset form
+      saleQty.value = "";
+      saleTotal.value = "";
+      document.getElementById("saleCustomer").value = "";
+      document.getElementById("saleDate").value = "";
+    });
+
+    // Print Receipt
+    document.querySelector("#salesTable").addEventListener("click", (e) => {
+      if (e.target.classList.contains("printBtn")) {
+        const saleId = e.target.dataset.id;
+        const sale = sales.find(s => s.id === saleId);
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text("Zstore Receipt", 20, 20);
+        doc.setFontSize(12);
+        doc.text(`Sale ID: ${sale.id}`, 20, 40);
+        doc.text(`Date: ${sale.date}`, 20, 50);
+        doc.text(`Customer: ${sale.customer}`, 20, 60);
+        doc.text(`Product: ${sale.product}`, 20, 70);
+        doc.text(`Quantity: ${sale.quantity}`, 20, 80);
+        doc.text(`Total: Taka ${sale.total}`, 20, 90);
+        doc.text("Thank you for your purchase!", 20, 110);
+
+        doc.save(`${sale.id}_receipt.pdf`);
+      }
+    });
+
+    displaySales();
+
+    // Scroll animation
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    });
+    document.querySelectorAll('.fade-up').forEach(elem => observer.observe(elem));
+  </script>
+
+</body>
+
+</html>
